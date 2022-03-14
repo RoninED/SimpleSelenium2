@@ -2,9 +2,10 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
-
 
 public class MainTest {
     public static GooglePage googlePage;
@@ -16,9 +17,8 @@ public class MainTest {
 //        System.setProperty("webdriver.chrome.driver", "C:\\chromeDriver\\chromedriver.exe");
         driver = new ChromeDriver();
         googlePage = new GooglePage(driver);
-        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-
-
+//        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @Before
@@ -27,11 +27,10 @@ public class MainTest {
         driver.manage().window().maximize();
     }
 
-    @After
-    public void after() {
-
+    @AfterClass
+    public static void afterClass() {
+        driver.quit();
     }
-
 
     @Test
     public void testUSDforBuy() {
@@ -48,14 +47,4 @@ public class MainTest {
         double result = Double.parseDouble(googlePage.getCurrencyValue());
         Assert.assertTrue( "Рано продавать!!",result > 110.00);
     }
-
-
-
-
-    @AfterClass
-    public static void afterClass() {
-        driver.quit();
-    }
-
-
 }
